@@ -18,46 +18,46 @@
             <div class="input-field">
                 {{ form_widget(form.client.firstname) }}
                 <label>Prénom</label>
-                <div class="form-error"></div>
+                {{ form_errors(form.client.firstname) }}
             </div>
             <div class="input-field">
                 {{ form_widget(form.client.lastname) }}
                 <label>Nom</label>
-                <div class="form-error"></div>
+                {{ form_errors(form.client.lastname) }}
             </div>
             <div class="input-field">
                 {{ form_widget(form.billing.adressLine1) }}
                 <label>Adresse</label>
-                <div class="form-error"></div>
+                {{ form_errors(form.billing.adressLine1) }}
             </div>
             <div class="input-field">
                 {{ form_widget(form.billing.adressLine2) }}
                 <label>Complément adr.</label>
-                <div class="form-error"></div>
+                {{ form_errors(form.billing.adressLine2) }}
             </div>
             <div class="input-field">
                 {{ form_widget(form.billing.city) }}
                 <label>Ville</label>
-                <div class="form-error"></div>
+                {{ form_errors(form.billing.city) }}
             </div>
             <div class="input-field">
                 {{ form_widget(form.billing.zipcode) }}
                 <label>Code postal</label>
-                <div class="form-error"></div>
+                {{ form_errors(form.billing.zipcode) }}
             </div>
             <div class="input-field">
                 {{ form_widget(form.billing.country) }}
                 <label>Pays</label>
-                <div class="form-error"></div>
+                {{ form_errors(form.billing.country) }}
             </div>
             <div class="input-field">
                 {{ form_widget(form.billing.phone) }}
                 <label>Téléphone</label>
-                <div class="form-error"></div>
+                {{ form_errors(form.billing.phone) }}
             </div>
             <div class="input-field">
                 {{ form_widget(form.client.email) }}
-                <div class="form-error"></div>
+                {{ form_errors(form.client.email) }}
             </div>
         </div>
     </div>
@@ -68,42 +68,42 @@
                 <div class="input-field">
                     {{ form_widget(form.shipping.clientFirstName) }}
                     <label>Prénom</label>
-                    <div class="form-error"></div>
+                    {{ form_errors(form.shipping.clientFirstName) }}
                 </div>
                 <div class="input-field">
                     {{ form_widget(form.shipping.clientLastName) }}
                     <label>Nom</label>
-                    <div class="form-error"></div>
+                    {{ form_errors(form.shipping.clientLastName) }}
                 </div>
                 <div class="input-field">
                     {{ form_widget(form.shipping.adressLine1) }}
                     <label>Adresse</label>
-                    <div class="form-error"></div>
+                    {{ form_errors(form.shipping.adressLine1) }}
                 </div>
                 <div class="input-field">
                     {{ form_widget(form.shipping.adressLine2) }}
                     <label>Complément adr.</label>
-                    <div class="form-error"></div>
+                    {{ form_errors(form.shipping.adressLine2) }}
                 </div>
                 <div class="input-field">
                     {{ form_widget(form.shipping.city) }}
                     <label>Ville</label>
-                    <div class="form-error"></div>
+                    {{ form_errors(form.shipping.city) }}
                 </div>
                 <div class="input-field">
                     {{ form_widget(form.shipping.zipcode) }}
                     <label>Code postal</label>
-                    <div class="form-error"></div>
+                    {{ form_errors(form.shipping.zipcode) }}
                 </div>
                 <div class="input-field">
                    {{ form_widget(form.shipping.country) }}
                     <label>Pays</label>
-                    <div class="form-error"></div>
+                    {{ form_errors(form.shipping.country) }}
                 </div>
                 <div class="input-field">
                     {{ form_widget(form.shipping.phone) }}
                     <label>Téléphone</label>
-                    <div class="form-error"></div>
+                    {{ form_errors(form.shipping.phone) }}
                 </div>
             </div>
         </li>
