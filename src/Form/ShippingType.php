@@ -6,18 +6,30 @@ use App\Entity\Shipping;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ShippingType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('adressLine1')
-            ->add('adressLine2')
-            ->add('city')
-            ->add('zipcode')
-            ->add('country')
-            ->add('phone')
+        ->add('clientFirstName')
+        ->add('clientLastName')
+        ->add('adressLine1')
+        ->add('adressLine2', TextType::class, [
+            'required' => false
+        ])
+        ->add('city')
+        ->add('zipcode')
+        ->add('country', ChoiceType::class, [
+            'choices' => [
+                'France' => 'France',
+                'Belgique' => 'Belgique',
+                'Luxembourg' => 'Luxembourg'
+                ]
+            ])
+        ->add('phone')
         ;
     }
 

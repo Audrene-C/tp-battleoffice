@@ -25,7 +25,7 @@
             </div>
         </div>
     </section>
-    <form method="post">
+    {{ form_start(form, {'method': 'POST'}) }}
         <div class="container">
             <div class="row">
                 <div class="content col s12 m12 l8">
@@ -290,5 +290,5 @@
                 </aside>
             </div>
         </div>
-    </form>
+    {{ form_end(form) }}
 {% endblock %}

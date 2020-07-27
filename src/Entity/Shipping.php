@@ -20,6 +20,15 @@ class Shipping
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $clientFirstName;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $clientLastName;
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $adressLine1;
 
     /**
@@ -46,6 +55,7 @@ class Shipping
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $phone;
+
 
     public function getId(): ?int
     {
@@ -120,6 +130,30 @@ class Shipping
     public function setPhone(string $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getClientFirstName(): ?string
+    {
+        return $this->clientFirstName;
+    }
+
+    public function setClientFirstName(?string $clientFirstName): self
+    {
+        $this->clientFirstName = $clientFirstName;
+
+        return $this;
+    }
+
+    public function getClientLastName(): ?string
+    {
+        return $this->clientLastName;
+    }
+
+    public function setClientLastName(?string $clientLastName): self
+    {
+        $this->clientLastName = $clientLastName;
 
         return $this;
     }

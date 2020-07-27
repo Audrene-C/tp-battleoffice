@@ -6,6 +6,8 @@ use App\Entity\Billing;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class BillingType extends AbstractType
 {
@@ -13,10 +15,18 @@ class BillingType extends AbstractType
     {
         $builder
             ->add('adressLine1')
-            ->add('adressLine2')
+            ->add('adressLine2', TextType::class, [
+                'required' => false
+            ])
             ->add('city')
             ->add('zipcode')
-            ->add('country')
+            ->add('country', ChoiceType::class, [
+                'choices' => [
+                    'France' => 'France',
+                    'Belgique' => 'Belgique',
+                    'Luxembourg' => 'Luxembourg'
+                    ]
+                ])
             ->add('phone')
         ;
     }

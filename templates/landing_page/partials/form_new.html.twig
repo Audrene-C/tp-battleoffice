@@ -16,55 +16,47 @@
         <p class="h6 center-align">Remplissez ce formulaire</p>
         <div class="form-wrapper">
             <div class="input-field">
-                <input type="text">
+                {{ form_widget(form.client.firstname) }}
                 <label>Prénom</label>
                 <div class="form-error"></div>
             </div>
             <div class="input-field">
-                <input type="text">
+                {{ form_widget(form.client.lastname) }}
                 <label>Nom</label>
                 <div class="form-error"></div>
             </div>
             <div class="input-field">
-                <input type="text">
+                {{ form_widget(form.billing.adressLine1) }}
                 <label>Adresse</label>
                 <div class="form-error"></div>
             </div>
             <div class="input-field">
-                <input type="text">
+                {{ form_widget(form.billing.adressLine2) }}
                 <label>Complément adr.</label>
                 <div class="form-error"></div>
             </div>
             <div class="input-field">
-                <input type="text">
+                {{ form_widget(form.billing.city) }}
                 <label>Ville</label>
                 <div class="form-error"></div>
             </div>
             <div class="input-field">
-                <input type="text">
+                {{ form_widget(form.billing.zipcode) }}
                 <label>Code postal</label>
                 <div class="form-error"></div>
             </div>
             <div class="input-field">
-                <select>
-                    <option>France</option>
-                </select>
+                {{ form_widget(form.billing.country) }}
                 <label>Pays</label>
                 <div class="form-error"></div>
             </div>
             <div class="input-field">
-                <input type="text">
+                {{ form_widget(form.billing.phone) }}
                 <label>Téléphone</label>
                 <div class="form-error"></div>
             </div>
             <div class="input-field">
-                <input type="text">
-                <label>Email</label>
-                <div class="form-error"></div>
-            </div>
-            <div class="input-field">
-                <input type="text">
-                <label>Confirmation email</label>
+                {{ form_widget(form.client.email) }}
                 <div class="form-error"></div>
             </div>
         </div>
@@ -74,44 +66,42 @@
             <div class="collapsible-header"><i class="material-icons">markunread_mailbox</i>Adresse de livraison différente ?</div>
             <div class="collapsible-body">
                 <div class="input-field">
-                    <input type="text">
+                    {{ form_widget(form.shipping.clientFirstName) }}
                     <label>Prénom</label>
                     <div class="form-error"></div>
                 </div>
                 <div class="input-field">
-                    <input type="text">
+                    {{ form_widget(form.shipping.clientLastName) }}
                     <label>Nom</label>
                     <div class="form-error"></div>
                 </div>
                 <div class="input-field">
-                    <input type="text">
+                    {{ form_widget(form.shipping.adressLine1) }}
                     <label>Adresse</label>
                     <div class="form-error"></div>
                 </div>
                 <div class="input-field">
-                    <input type="text">
+                    {{ form_widget(form.shipping.adressLine2) }}
                     <label>Complément adr.</label>
                     <div class="form-error"></div>
                 </div>
                 <div class="input-field">
-                    <input type="text">
+                    {{ form_widget(form.shipping.city) }}
                     <label>Ville</label>
                     <div class="form-error"></div>
                 </div>
                 <div class="input-field">
-                    <input type="text">
+                    {{ form_widget(form.shipping.zipcode) }}
                     <label>Code postal</label>
                     <div class="form-error"></div>
                 </div>
                 <div class="input-field">
-                    <select>
-                        <option>France</option>
-                    </select>
+                   {{ form_widget(form.shipping.country) }}
                     <label>Pays</label>
                     <div class="form-error"></div>
                 </div>
                 <div class="input-field">
-                    <input type="text">
+                    {{ form_widget(form.shipping.phone) }}
                     <label>Téléphone</label>
                     <div class="form-error"></div>
                 </div>
