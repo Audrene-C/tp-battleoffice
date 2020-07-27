@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Shipping{% endblock %}
+
+{% block body %}
+    <h1>Shipping</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ shipping.id }}</td>
+            </tr>
+            <tr>
+                <th>AdressLine1</th>
+                <td>{{ shipping.adressLine1 }}</td>
+            </tr>
+            <tr>
+                <th>AdressLine2</th>
+                <td>{{ shipping.adressLine2 }}</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>{{ shipping.city }}</td>
+            </tr>
+            <tr>
+                <th>Zipcode</th>
+                <td>{{ shipping.zipcode }}</td>
+            </tr>
+            <tr>
+                <th>Country</th>
+                <td>{{ shipping.country }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ shipping.phone }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('shipping_index') }}">back to list</a>
+
+    <a href="{{ path('shipping_edit', {'id': shipping.id}) }}">edit</a>
+
+    {{ include('shipping/_delete_form.html.twig') }}
+{% endblock %}

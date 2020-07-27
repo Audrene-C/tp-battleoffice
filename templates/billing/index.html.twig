@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Billing index{% endblock %}
+
+{% block body %}
+    <h1>Billing index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>AdressLine1</th>
+                <th>AdressLine2</th>
+                <th>City</th>
+                <th>Zipcode</th>
+                <th>Country</th>
+                <th>Phone</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for billing in billings %}
+            <tr>
+                <td>{{ billing.id }}</td>
+                <td>{{ billing.adressLine1 }}</td>
+                <td>{{ billing.adressLine2 }}</td>
+                <td>{{ billing.city }}</td>
+                <td>{{ billing.zipcode }}</td>
+                <td>{{ billing.country }}</td>
+                <td>{{ billing.phone }}</td>
+                <td>
+                    <a href="{{ path('billing_show', {'id': billing.id}) }}">show</a>
+                    <a href="{{ path('billing_edit', {'id': billing.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('billing_new') }}">Create new</a>
+{% endblock %}

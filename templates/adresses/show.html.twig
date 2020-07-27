@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Adresses{% endblock %}
+
+{% block body %}
+    <h1>Adresses</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ adress.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('adresses_index') }}">back to list</a>
+
+    <a href="{{ path('adresses_edit', {'id': adress.id}) }}">edit</a>
+
+    {{ include('adresses/_delete_form.html.twig') }}
+{% endblock %}
