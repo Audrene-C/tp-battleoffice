@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Adresses;
+use App\Entity\Addresses;
 use App\Entity\Billing;
 use App\Entity\Client;
 use App\Entity\Order;
@@ -10,9 +10,13 @@ use App\Form\BillingType;
 use App\Entity\Shipping;
 use App\Form\ClientType;
 use App\Form\ShippingType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpClient\HttpClient;
 
 class LandingPageController extends AbstractController
 {
@@ -95,13 +99,74 @@ class LandingPageController extends AbstractController
         return $order;
     }
 
-    public function createAdresses(Billing $billing, Shipping $shipping)
+    public function createAddresses(Billing $billing, Shipping $shipping)
     {
-        $adresses = new Adresses;
-        $adresses->setBilling($billing);
-        $adresses->setShipping($shipping);
+        $addresses = new Addresses;
+        $addresses->setBilling($billing);
+        $addresses->setShipping($shipping);
 
-        return $adresses;
+        return $addresses;
+    }
+
+    public function sendRequest(Order $order, Addresses $addresses)
+    {
+        $encoder = new JsonEncoder();
+        $normalizer = new ObjectNormalizer();
+        $serializer = new Serializer([$normalizer], [$encoder]);
+        
+        $jsonOrder = $serializer->serialize($order, 'json');
+        $jsonAddresses = $serializer->serialize($addresses, 'json');
+        $table = array('order' => $jsonOrder, 'addresses' => $jsonAddresses);
+        $json = $encoder->encode($table, 'json');
+        echo($json);
+        dd($json);
+
+        // dd($jsonOrder, $jsonAddresses);
+        
+        $httpClient = HttpClient::create();
+        $response = $httpClient->request('POST', 'https://api-commerce.simplon-roanne.com/order', [
+            'headers' => [
+                'accept'=> 'application/json',
+                'Authorization' => 'Bearer mJxTXVXMfRzLg6ZdhUhM4F6Eutcm1ZiPk4fNmvBMxyNR4ciRsc8v0hOmlzA0vTaX',
+                'Content-Type' => 'application/json',
+            ],
+            'body' => '{
+                "order": {
+                  "id": 1,
+                  "product": "Nerf Elite Jolt",
+                  "payment_method": "paypal",
+                  "status": "WAITING",
+                  "client": {
+                    "firstname": "Audrene",
+                    "lastname": "Et Greg un peu",
+                    "email": "francois.dupont@gmail.com"
+                  },
+                  "addresses": {
+                    "billing": {
+                      "address_line1": "1, rue du test",
+                      "address_line2": "3ème étage",
+                      "city": "Lyon",
+                      "zipcode": "69000",
+                      "country": "France",
+                      "phone": "string"
+                    },
+                    "shipping": {
+                      "address_line1": "1, rue du test",
+                      "address_line2": "3ème étage",
+                      "city": "Lyon",
+                      "zipcode": "69000",
+                      "country": "France",
+                      "phone": "string"
+                    }
+                  }
+                }
+              }'
+            // 'json' => [
+            //     'order' => $order,
+            //     'addresses' => $addresses,
+            // ],
+        ]);
+        return $response;
     }
 
     /**
@@ -117,7 +182,6 @@ class LandingPageController extends AbstractController
         ];
 
         $form = $this->createFormBuilder($formArray)
-        ->setAction($this->generateUrl('https://api-commerce.simplon-roanne.com/order'))
         ->setMethod('POST')
         ->add('client', ClientType::class)
         ->add('billing', BillingType::class)
@@ -131,7 +195,13 @@ class LandingPageController extends AbstractController
             $billing = $this->createBilling($request);
             $shipping = $this->createShipping($request, $client, $billing);
             $order = $this->createOrder($request, $client);
-            $adresses = $this->createAdresses($billing, $shipping);            
+            $addresses = $this->createAddresses($billing, $shipping);
+
+            $table = array('order' => $order, 'addresses' =>$addresses);
+
+            $response = $this->sendRequest($order, $addresses);
+            $statusCode = $response->getStatusCode(); 
+            dd($statusCode);        
             
             //dd($client, $billing, $shipping, $order);
             $entityManager = $this->getDoctrine()->getManager();
@@ -139,7 +209,7 @@ class LandingPageController extends AbstractController
             $entityManager->persist($billing);
             $entityManager->persist($shipping);
             $entityManager->persist($order);
-            $entityManager->persist($adresses);
+            $entityManager->persist($addresses);
             $entityManager->flush();
 
             return $this->redirectToRoute('order_index', [

@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Adresses index{% endblock %}
+{% block title %}Addresses index{% endblock %}
 
 {% block body %}
-    <h1>Adresses index</h1>
+    <h1>Addresses index</h1>
 
     <table class="table">
         <thead>
@@ -13,12 +13,12 @@
             </tr>
         </thead>
         <tbody>
-        {% for adress in adresses %}
+        {% for adress in Addresses %}
             <tr>
                 <td>{{ adress.id }}</td>
                 <td>
-                    <a href="{{ path('adresses_show', {'id': adress.id}) }}">show</a>
-                    <a href="{{ path('adresses_edit', {'id': adress.id}) }}">edit</a>
+                    <a href="{{ path('Addresses_show', {'id': adress.id}) }}">show</a>
+                    <a href="{{ path('Addresses_edit', {'id': adress.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -29,5 +29,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('adresses_new') }}">Create new</a>
+    <a href="{{ path('Addresses_new') }}">Create new</a>
 {% endblock %}
