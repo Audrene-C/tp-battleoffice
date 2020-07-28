@@ -39,6 +39,11 @@ class Order
      */
     private $client;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Addresses::class, cascade={"persist", "remove"})
+     */
+    private $Adresses;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +93,18 @@ class Order
     public function setClient(Client $client): self
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getAdresses(): ?Addresses
+    {
+        return $this->Adresses;
+    }
+
+    public function setAdresses(?Addresses $Adresses): self
+    {
+        $this->Adresses = $Adresses;
 
         return $this;
     }

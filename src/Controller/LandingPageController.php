@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 class LandingPageController extends AbstractController
 {
@@ -54,7 +55,7 @@ class LandingPageController extends AbstractController
         $shipping = new Shipping;
         foreach ($shippingTable as $key) {
             if (empty($key)) {
-                $countEmpty += 1;
+                $countEmpty += 2;
             }
         }
         
@@ -84,7 +85,16 @@ class LandingPageController extends AbstractController
         }
     }
 
-    public function createOrder(Request $request, Client $client)
+    public function createAddresses(Billing $billing, Shipping $shipping)
+    {
+        $addresses = new Addresses;
+        $addresses->setBilling($billing);
+        $addresses->setShipping($shipping);
+
+        return $addresses;
+    }
+
+    public function createOrder(Request $request, Client $client, Addresses $addresses)
     {
         $orderTable = $request->request->get('order');
         $product = $orderTable['cart']['cart_products'][0];
@@ -95,33 +105,22 @@ class LandingPageController extends AbstractController
         $order->setProduct($product);
         $order->setPaymentMethod($paymentMethod);
         $order->setStatus('WAITING');
+        $order->setAdresses($addresses);
 
         return $order;
     }
 
-    public function createAddresses(Billing $billing, Shipping $shipping)
+    public function sendRequest(Order $order)
     {
-        $addresses = new Addresses;
-        $addresses->setBilling($billing);
-        $addresses->setShipping($shipping);
+        // $encoder = new JsonEncoder();
+        // $normalizer = new ObjectNormalizer(null, new CamelCaseToSnakeCaseNameConverter());
+        // $serializer = new Serializer([$normalizer], [$encoder]);
 
-        return $addresses;
-    }
-
-    public function sendRequest(Order $order, Addresses $addresses)
-    {
-        $encoder = new JsonEncoder();
-        $normalizer = new ObjectNormalizer();
-        $serializer = new Serializer([$normalizer], [$encoder]);
+        // $orderTable = $normalizer->normalize($order);
         
-        $jsonOrder = $serializer->serialize($order, 'json');
-        $jsonAddresses = $serializer->serialize($addresses, 'json');
-        $table = array('order' => $jsonOrder, 'addresses' => $jsonAddresses);
-        $json = $encoder->encode($table, 'json');
-        echo($json);
-        dd($json);
-
-        // dd($jsonOrder, $jsonAddresses);
+        // $table = array('order' => $orderTable);
+        // $json = $encoder->encode($table, 'json');
+        // dd($json);
         
         $httpClient = HttpClient::create();
         $response = $httpClient->request('POST', 'https://api-commerce.simplon-roanne.com/order', [
@@ -130,42 +129,39 @@ class LandingPageController extends AbstractController
                 'Authorization' => 'Bearer mJxTXVXMfRzLg6ZdhUhM4F6Eutcm1ZiPk4fNmvBMxyNR4ciRsc8v0hOmlzA0vTaX',
                 'Content-Type' => 'application/json',
             ],
-            'body' => '{
-                "order": {
-                  "id": 1,
-                  "product": "Nerf Elite Jolt",
-                  "payment_method": "paypal",
-                  "status": "WAITING",
-                  "client": {
-                    "firstname": "Audrene",
-                    "lastname": "Et Greg un peu",
-                    "email": "francois.dupont@gmail.com"
-                  },
-                  "addresses": {
-                    "billing": {
-                      "address_line1": "1, rue du test",
-                      "address_line2": "3ème étage",
-                      "city": "Lyon",
-                      "zipcode": "69000",
-                      "country": "France",
-                      "phone": "string"
-                    },
-                    "shipping": {
-                      "address_line1": "1, rue du test",
-                      "address_line2": "3ème étage",
-                      "city": "Lyon",
-                      "zipcode": "69000",
-                      "country": "France",
-                      "phone": "string"
-                    }
-                  }
-                }
-              }'
-            // 'json' => [
-            //     'order' => $order,
-            //     'addresses' => $addresses,
-            // ],
+            'json' => [
+                'order' => [
+                    'id' => $order->getId(),
+                    'product' => $order->getProduct(),
+                    'payment_method' => $order->getPaymentMethod(),
+                    'status' => $order->getStatus(),
+                    'client' => [
+                        'firstname' => $order->getClient()->getFirstname(),
+                        'lastname' => $order->getClient()->getLastname(),
+                        'email' => $order->getClient()->getEmail(),
+                    ],
+                    'addresses' => [
+                        'billing' => [
+                            'adress_line1' => $order->getAdresses()->getBilling()->getAdressLine1(),
+                            'adress_line2' => $order->getAdresses()->getBilling()->getAdressLine2(),
+                            'city' => $order->getAdresses()->getBilling()->getCity(),
+                            'zipcode' => $order->getAdresses()->getBilling()->getZipcode(),
+                            'country' => $order->getAdresses()->getBilling()->getCountry(),
+                            'phone' => $order->getAdresses()->getBilling()->getPhone(),
+                        ],
+                        'shipping' => [
+                            'adress_line1' => $order->getAdresses()->getShipping()->getAdressLine1(),
+                            'adress_line2' => $order->getAdresses()->getShipping()->getAdressLine2(),
+                            'city' => $order->getAdresses()->getShipping()->getCity(),
+                            'zipcode' => $order->getAdresses()->getShipping()->getZipcode(),
+                            'country' => $order->getAdresses()->getShipping()->getCountry(),
+                            'phone' => $order->getAdresses()->getShipping()->getPhone(),
+                        ]
+                    ]
+                ]
+            ]
         ]);
+
         return $response;
     }
 
@@ -194,10 +190,8 @@ class LandingPageController extends AbstractController
             $client = $this->createClient($request);
             $billing = $this->createBilling($request);
             $shipping = $this->createShipping($request, $client, $billing);
-            $order = $this->createOrder($request, $client);
             $addresses = $this->createAddresses($billing, $shipping);
-
-            $table = array('order' => $order, 'addresses' =>$addresses);
+            $order = $this->createOrder($request, $client, $addresses);
 
             $response = $this->sendRequest($order, $addresses);
             $statusCode = $response->getStatusCode(); 
@@ -208,8 +202,8 @@ class LandingPageController extends AbstractController
             $entityManager->persist($client);
             $entityManager->persist($billing);
             $entityManager->persist($shipping);
-            $entityManager->persist($order);
             $entityManager->persist($addresses);
+            $entityManager->persist($order);
             $entityManager->flush();
 
             return $this->redirectToRoute('order_index', [
