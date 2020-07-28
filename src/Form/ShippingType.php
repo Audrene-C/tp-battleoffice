@@ -23,6 +23,8 @@ class ShippingType extends AbstractType
         ->add('city')
         ->add('zipcode')
         ->add('country', ChoiceType::class, [
+            'required' => false,
+            'placeholder' => 'Choose a country',
             'choices' => [
                 'France' => 'France',
                 'Belgique' => 'Belgique',

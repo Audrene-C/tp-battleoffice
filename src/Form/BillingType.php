@@ -21,6 +21,7 @@ class BillingType extends AbstractType
             ->add('city')
             ->add('zipcode')
             ->add('country', ChoiceType::class, [
+                'placeholder' => 'Choose a country',
                 'choices' => [
                     'France' => 'France',
                     'Belgique' => 'Belgique',
