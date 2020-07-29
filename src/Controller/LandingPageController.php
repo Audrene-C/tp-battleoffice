@@ -39,7 +39,7 @@ class LandingPageController extends AbstractController
         $billing->setAdressLine1(($dataForm['billing']['adressLine1']));
         $billing->setAdressLine2(($dataForm['billing']['adressLine2']));
         $billing->setCity(($dataForm['billing']['city']));
-        $billing->setZipcode(($dataForm['billing']['zipcode']));
+        $billing->setZipcode(intval(($dataForm['billing']['zipcode'])));
         $billing->setCountry(($dataForm['billing']['country']));
         $billing->setPhone(($dataForm['billing']['phone']));
 
@@ -54,8 +54,8 @@ class LandingPageController extends AbstractController
         $countEmpty = 0;
         $shipping = new Shipping;
         foreach ($shippingTable as $key) {
-            if (empty($key)) {
-                $countEmpty += 2;
+            if (!is_null($key)) {
+                $countEmpty += 1;
             }
         }
         
@@ -65,7 +65,7 @@ class LandingPageController extends AbstractController
             $shipping->setAdressLine1($billing->getAdressLine1());
             $shipping->setAdressLine2($billing->getAdressLine2());
             $shipping->setCity($billing->getCity());
-            $shipping->setZipcode($billing->getZipcode());
+            $shipping->setZipcode(intval($billing->getZipcode()));
             $shipping->setCountry($billing->getCountry());
             $shipping->setPhone($billing->getPhone());
             
@@ -77,7 +77,7 @@ class LandingPageController extends AbstractController
             $shipping->setAdressLine1($shippingTable['adressLine1']);
             $shipping->setAdressLine2($shippingTable['adressLine2']);
             $shipping->setCity($shippingTable['city']);
-            $shipping->setZipcode($shippingTable['zipcode']);
+            $shipping->setZipcode(intval($shippingTable['zipcode']));
             $shipping->setCountry($shippingTable['country']);
             $shipping->setPhone($shippingTable['phone']);
 
@@ -186,16 +186,15 @@ class LandingPageController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $client = $this->createClient($request);
             $billing = $this->createBilling($request);
             $shipping = $this->createShipping($request, $client, $billing);
             $addresses = $this->createAddresses($billing, $shipping);
             $order = $this->createOrder($request, $client, $addresses);
-
-            $response = $this->sendRequest($order, $addresses);
-            $statusCode = $response->getStatusCode(); 
-            dd($statusCode);        
+            
+            $response = $this->sendRequest($order);
+            $content = $response->getContent(); 
+            dd($content);        
             
             //dd($client, $billing, $shipping, $order);
             $entityManager = $this->getDoctrine()->getManager();
