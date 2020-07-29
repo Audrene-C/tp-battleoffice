@@ -14,8 +14,8 @@ class BillingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('adressLine1')
-            ->add('adressLine2', TextType::class, [
+            ->add('addressLine1')
+            ->add('addressLine2', TextType::class, [
                 'required' => false
             ])
             ->add('city')

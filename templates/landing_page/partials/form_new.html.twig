@@ -26,14 +26,14 @@
                 {{ form_errors(form.client.lastname) }}
             </div>
             <div class="input-field">
-                {{ form_widget(form.billing.adressLine1) }}
-                <label>Adresse</label>
-                {{ form_errors(form.billing.adressLine1) }}
+                {{ form_widget(form.billing.addressLine1) }}
+                <label>Addresse</label>
+                {{ form_errors(form.billing.addressLine1) }}
             </div>
             <div class="input-field">
-                {{ form_widget(form.billing.adressLine2) }}
+                {{ form_widget(form.billing.addressLine2) }}
                 <label>Complément adr.</label>
-                {{ form_errors(form.billing.adressLine2) }}
+                {{ form_errors(form.billing.addressLine2) }}
             </div>
             <div class="input-field">
                 {{ form_widget(form.billing.city) }}
@@ -63,7 +63,7 @@
     </div>
     <ul class="collapsible">
         <li>
-            <div class="collapsible-header"><i class="material-icons">markunread_mailbox</i>Adresse de livraison différente ?</div>
+            <div class="collapsible-header"><i class="material-icons">markunread_mailbox</i>Addresse de livraison différente ?</div>
             <div class="collapsible-body">
                 <div class="input-field">
                     {{ form_widget(form.shipping.clientFirstName) }}
@@ -76,14 +76,14 @@
                     {{ form_errors(form.shipping.clientLastName) }}
                 </div>
                 <div class="input-field">
-                    {{ form_widget(form.shipping.adressLine1) }}
-                    <label>Adresse</label>
-                    {{ form_errors(form.shipping.adressLine1) }}
+                    {{ form_widget(form.shipping.addressLine1) }}
+                    <label>Addresse</label>
+                    {{ form_errors(form.shipping.addressLine1) }}
                 </div>
                 <div class="input-field">
-                    {{ form_widget(form.shipping.adressLine2) }}
+                    {{ form_widget(form.shipping.addressLine2) }}
                     <label>Complément adr.</label>
-                    {{ form_errors(form.shipping.adressLine2) }}
+                    {{ form_errors(form.shipping.addressLine2) }}
                 </div>
                 <div class="input-field">
                     {{ form_widget(form.shipping.city) }}
@@ -120,7 +120,7 @@
                 <div class="collapsible-body card-form">
                     <div class="row">
                         <div class="center-align">
-                            <button type="submit" name="order[payment_method]" value="lpmonetico" class="btn-large btn-block waves-effect waves-light">Continuer</button>
+                            <button type="submit" name="order[payment_method]" value="stripe" class="btn-large btn-block waves-effect waves-light">Continuer</button>
                             <p>J'accepte les <a href="https://feelwellshop.com/fr/conditions-generales-de-ventes" target="_blank">conditions générales de vente</a></p>
                             <img class="responsive-img monetico" src="assets/images/paiement-securise-stripe.jpeg" alt="Stripe protège vos achats">
                         </div>
@@ -132,7 +132,7 @@
                 <div class="collapsible-body">
                     <div class="row">
                         <div class="center-align">
-                            <button type="submit" name="order[payment_method]" value="lppaypal" class="btn-large btn-block waves-effect waves-light">Continuer sur PayPal</button>
+                            <button type="submit" name="order[payment_method]" value="paypal" class="btn-large btn-block waves-effect waves-light">Continuer sur PayPal</button>
                             <p>J'accepte les <a href="https://feelwellshop.com/fr/conditions-generales-de-ventes" target="_blank">conditions générales de vente</a></p>
                         </div>
                     </div>

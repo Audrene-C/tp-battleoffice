@@ -30,20 +30,20 @@ class AddressesController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $adress = new Addresses();
-        $form = $this->createForm(AddressesType::class, $adress);
+        $address = new Addresses();
+        $form = $this->createForm(AddressesType::class, $address);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($adress);
+            $entityManager->persist($address);
             $entityManager->flush();
 
             return $this->redirectToRoute('Addresses_index');
         }
 
         return $this->render('Addresses/new.html.twig', [
-            'adress' => $adress,
+            'address' => $address,
             'form' => $form->createView(),
         ]);
     }
@@ -51,19 +51,19 @@ class AddressesController extends AbstractController
     /**
      * @Route("/{id}", name="Addresses_show", methods={"GET"})
      */
-    public function show(Addresses $adress): Response
+    public function show(Addresses $address): Response
     {
         return $this->render('Addresses/show.html.twig', [
-            'adress' => $adress,
+            'address' => $address,
         ]);
     }
 
     /**
      * @Route("/{id}/edit", name="Addresses_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Addresses $adress): Response
+    public function edit(Request $request, Addresses $address): Response
     {
-        $form = $this->createForm(AddressesType::class, $adress);
+        $form = $this->createForm(AddressesType::class, $address);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -73,7 +73,7 @@ class AddressesController extends AbstractController
         }
 
         return $this->render('Addresses/edit.html.twig', [
-            'adress' => $adress,
+            'address' => $address,
             'form' => $form->createView(),
         ]);
     }
@@ -81,11 +81,11 @@ class AddressesController extends AbstractController
     /**
      * @Route("/{id}", name="Addresses_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Addresses $adress): Response
+    public function delete(Request $request, Addresses $address): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$adress->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$address->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($adress);
+            $entityManager->remove($address);
             $entityManager->flush();
         }
 

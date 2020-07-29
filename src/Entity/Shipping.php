@@ -29,12 +29,12 @@ class Shipping
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $adressLine1;
+    private $addressLine1;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $adressLine2;
+    private $addressLine2;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -42,7 +42,7 @@ class Shipping
     private $city;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $zipcode;
 
@@ -62,26 +62,26 @@ class Shipping
         return $this->id;
     }
 
-    public function getAdressLine1(): ?string
+    public function getAddressLine1(): ?string
     {
-        return $this->adressLine1;
+        return $this->addressLine1;
     }
 
-    public function setAdressLine1(string $adressLine1): self
+    public function setAddressLine1(string $addressLine1): self
     {
-        $this->adressLine1 = $adressLine1;
+        $this->addressLine1 = $addressLine1;
 
         return $this;
     }
 
-    public function getAdressLine2(): ?string
+    public function getAddressLine2(): ?string
     {
-        return $this->adressLine2;
+        return $this->addressLine2;
     }
 
-    public function setAdressLine2(?string $adressLine2): self
+    public function setAddressLine2(?string $addressLine2): self
     {
-        $this->adressLine2 = $adressLine2;
+        $this->addressLine2 = $addressLine2;
 
         return $this;
     }
@@ -98,12 +98,12 @@ class Shipping
         return $this;
     }
 
-    public function getZipcode(): ?int
+    public function getZipcode(): ?string
     {
         return $this->zipcode;
     }
 
-    public function setZipcode(int $zipcode): self
+    public function setZipcode(string $zipcode): self
     {
         $this->zipcode = $zipcode;
 

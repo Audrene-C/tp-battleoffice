@@ -36,10 +36,10 @@ class LandingPageController extends AbstractController
     {
         $dataForm = $request->request->get('form');
         $billing = new Billing;
-        $billing->setAdressLine1(($dataForm['billing']['adressLine1']));
-        $billing->setAdressLine2(($dataForm['billing']['adressLine2']));
+        $billing->setAddressLine1(($dataForm['billing']['addressLine1']));
+        $billing->setAddressLine2(($dataForm['billing']['addressLine2']));
         $billing->setCity(($dataForm['billing']['city']));
-        $billing->setZipcode(intval(($dataForm['billing']['zipcode'])));
+        $billing->setZipcode(($dataForm['billing']['zipcode']));
         $billing->setCountry(($dataForm['billing']['country']));
         $billing->setPhone(($dataForm['billing']['phone']));
 
@@ -62,10 +62,10 @@ class LandingPageController extends AbstractController
         if ($countEmpty === 8) {
             $shipping->setClientFirstName($client->getFirstname());
             $shipping->setClientLastName($client->getLastname());
-            $shipping->setAdressLine1($billing->getAdressLine1());
-            $shipping->setAdressLine2($billing->getAdressLine2());
+            $shipping->setAddressLine1($billing->getAddressLine1());
+            $shipping->setAddressLine2($billing->getAddressLine2());
             $shipping->setCity($billing->getCity());
-            $shipping->setZipcode(intval($billing->getZipcode()));
+            $shipping->setZipcode($billing->getZipcode());
             $shipping->setCountry($billing->getCountry());
             $shipping->setPhone($billing->getPhone());
             
@@ -74,10 +74,10 @@ class LandingPageController extends AbstractController
         } else {
             $shipping->setClientFirstName($shippingTable['clientFirstName']);
             $shipping->setClientLastName($shippingTable['clientLastName']);
-            $shipping->setAdressLine1($shippingTable['adressLine1']);
-            $shipping->setAdressLine2($shippingTable['adressLine2']);
+            $shipping->setAddressLine1($shippingTable['addressLine1']);
+            $shipping->setAddressLine2($shippingTable['addressLine2']);
             $shipping->setCity($shippingTable['city']);
-            $shipping->setZipcode(intval($shippingTable['zipcode']));
+            $shipping->setZipcode($shippingTable['zipcode']);
             $shipping->setCountry($shippingTable['country']);
             $shipping->setPhone($shippingTable['phone']);
 
@@ -105,7 +105,7 @@ class LandingPageController extends AbstractController
         $order->setProduct($product);
         $order->setPaymentMethod($paymentMethod);
         $order->setStatus('WAITING');
-        $order->setAdresses($addresses);
+        $order->setAddresses($addresses);
 
         return $order;
     }
@@ -142,20 +142,20 @@ class LandingPageController extends AbstractController
                     ],
                     'addresses' => [
                         'billing' => [
-                            'adress_line1' => $order->getAdresses()->getBilling()->getAdressLine1(),
-                            'adress_line2' => $order->getAdresses()->getBilling()->getAdressLine2(),
-                            'city' => $order->getAdresses()->getBilling()->getCity(),
-                            'zipcode' => $order->getAdresses()->getBilling()->getZipcode(),
-                            'country' => $order->getAdresses()->getBilling()->getCountry(),
-                            'phone' => $order->getAdresses()->getBilling()->getPhone(),
+                            'address_line1' => $order->getAddresses()->getBilling()->getAddressLine1(),
+                            'address_line2' => $order->getAddresses()->getBilling()->getAddressLine2(),
+                            'city' => $order->getAddresses()->getBilling()->getCity(),
+                            'zipcode' => $order->getAddresses()->getBilling()->getZipcode(),
+                            'country' => $order->getAddresses()->getBilling()->getCountry(),
+                            'phone' => $order->getAddresses()->getBilling()->getPhone(),
                         ],
                         'shipping' => [
-                            'adress_line1' => $order->getAdresses()->getShipping()->getAdressLine1(),
-                            'adress_line2' => $order->getAdresses()->getShipping()->getAdressLine2(),
-                            'city' => $order->getAdresses()->getShipping()->getCity(),
-                            'zipcode' => $order->getAdresses()->getShipping()->getZipcode(),
-                            'country' => $order->getAdresses()->getShipping()->getCountry(),
-                            'phone' => $order->getAdresses()->getShipping()->getPhone(),
+                            'address_line1' => $order->getAddresses()->getShipping()->getAddressLine1(),
+                            'address_line2' => $order->getAddresses()->getShipping()->getAddressLine2(),
+                            'city' => $order->getAddresses()->getShipping()->getCity(),
+                            'zipcode' => $order->getAddresses()->getShipping()->getZipcode(),
+                            'country' => $order->getAddresses()->getShipping()->getCountry(),
+                            'phone' => $order->getAddresses()->getShipping()->getPhone(),
                         ]
                     ]
                 ]
@@ -191,12 +191,8 @@ class LandingPageController extends AbstractController
             $shipping = $this->createShipping($request, $client, $billing);
             $addresses = $this->createAddresses($billing, $shipping);
             $order = $this->createOrder($request, $client, $addresses);
+
             
-            $response = $this->sendRequest($order);
-            $content = $response->getContent(); 
-            dd($content);        
-            
-            //dd($client, $billing, $shipping, $order);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($client);
             $entityManager->persist($billing);
@@ -204,7 +200,11 @@ class LandingPageController extends AbstractController
             $entityManager->persist($addresses);
             $entityManager->persist($order);
             $entityManager->flush();
-
+            
+            $response = $this->sendRequest($order);
+            $content = $response->getContent(); 
+            dd($content);
+                    
             return $this->redirectToRoute('order_index', [
                 'order' => $order
             ]);

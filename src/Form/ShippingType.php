@@ -16,8 +16,8 @@ class ShippingType extends AbstractType
         $builder
         ->add('clientFirstName')
         ->add('clientLastName')
-        ->add('adressLine1')
-        ->add('adressLine2', TextType::class, [
+        ->add('addressLine1')
+        ->add('addressLine2', TextType::class, [
             'required' => false
         ])
         ->add('city')
