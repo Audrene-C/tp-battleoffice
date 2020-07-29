@@ -113,7 +113,7 @@ class LandingPageController extends AbstractController
     public function sendRequest(Order $order)
     {
         // $encoder = new JsonEncoder();
-        // $normalizer = new ObjectNormalizer(null, new CamelCaseToSnakeCaseNameConverter());
+        // $normalizer = new ObjectNormalizer();
         // $serializer = new Serializer([$normalizer], [$encoder]);
 
         // $orderTable = $normalizer->normalize($order);
@@ -128,6 +128,7 @@ class LandingPageController extends AbstractController
                 'accept'=> 'application/json',
                 'Authorization' => 'Bearer mJxTXVXMfRzLg6ZdhUhM4F6Eutcm1ZiPk4fNmvBMxyNR4ciRsc8v0hOmlzA0vTaX',
                 'Content-Type' => 'application/json',
+                'User-Agent' => 'Audrene was here',
             ],
             'json' => [
                 'order' => [
@@ -202,12 +203,21 @@ class LandingPageController extends AbstractController
             $entityManager->flush();
             
             $response = $this->sendRequest($order);
-            $content = $response->getContent(); 
-            dd($content);
-                    
-            return $this->redirectToRoute('order_index', [
-                'order' => $order
-            ]);
+
+            if($response->getStatusCode() === 200) {
+
+                $encoder = new JsonEncoder();
+                $content = $encoder->decode($response->getContent(), 'array');
+                $apiId = $content['order_id'];
+                
+                $order->setApiId($apiId);
+                $entityManager->persist($order);
+                $entityManager->flush();
+                        
+                return $this->redirectToRoute('payment', [
+                    'id' => $order->getId()
+                ]);
+            }
         }
 
         return $this->render('landing_page/index_new.html.twig', [

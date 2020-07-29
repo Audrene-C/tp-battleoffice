@@ -44,6 +44,11 @@ class Order
      */
     private $Addresses;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $apiId;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +110,18 @@ class Order
     public function setAddresses(?Addresses $Addresses): self
     {
         $this->Addresses = $Addresses;
+
+        return $this;
+    }
+
+    public function getApiId(): ?int
+    {
+        return $this->apiId;
+    }
+
+    public function setApiId(?int $apiId): self
+    {
+        $this->apiId = $apiId;
 
         return $this;
     }
