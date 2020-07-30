@@ -125,7 +125,7 @@ class LandingPageController extends AbstractController
         $httpClient = HttpClient::create();
         $response = $httpClient->request('POST', 'https://api-commerce.simplon-roanne.com/order', [
             'headers' => [
-                'accept'=> 'application/json',
+                'accept' => 'application/json',
                 'Authorization' => 'Bearer mJxTXVXMfRzLg6ZdhUhM4F6Eutcm1ZiPk4fNmvBMxyNR4ciRsc8v0hOmlzA0vTaX',
                 'Content-Type' => 'application/json',
                 'User-Agent' => 'Audrene was here',
