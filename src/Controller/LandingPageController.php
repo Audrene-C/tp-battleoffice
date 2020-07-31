@@ -10,6 +10,7 @@ use App\Form\BillingType;
 use App\Entity\Shipping;
 use App\Form\ClientType;
 use App\Form\ShippingType;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +18,11 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class LandingPageController extends AbstractController
 {
@@ -166,6 +171,23 @@ class LandingPageController extends AbstractController
         return $response;
     }
 
+    public function sendEmail(MailerInterface $mailer)
+    {
+        $email = (new Email())
+            ->from('audrene.coatmeur@gmail.com')
+            ->to('mateo.balthazard@hotmail.com')
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject('On va te spammer')
+            ->text('WE ARE LEGION')
+            ->html(fopen('../templates/emails/confirmation.html.twig', 'r'));
+
+        $mailer->send($email);
+
+    }
+
     /**
      * @Route("/", name="landing_page")
      * @throws \Exception
@@ -203,11 +225,17 @@ class LandingPageController extends AbstractController
             $entityManager->flush();
             
             $response = $this->sendRequest($order);
+            // dd($response->getContent());
+
+            if(array_key_exists('error', $content = $response->toArray())) {
+                return $this->redirectToRoute('landing_page');
+            };
 
             if($response->getStatusCode() === 200) {
 
                 $encoder = new JsonEncoder();
                 $content = $encoder->decode($response->getContent(), 'array');
+                // dd($content);
                 $apiId = $content['order_id'];
                 
                 $order->setApiId($apiId);
@@ -227,10 +255,23 @@ class LandingPageController extends AbstractController
     /**
      * @Route("/confirmation", name="confirmation")
      */
-    public function confirmation()
+    public function confirmation(MailerInterface $mailer)
     {
-        return $this->render('landing_page/confirmation.html.twig', [
+        // $this->sendEmail($mailer);
 
-        ]);
+        $email = (new Email())
+        ->from('audrene.coatmeur@gmail.com')
+        ->to('mateo.balthazard@hotmail.com')
+        //->cc('cc@example.com')
+        //->bcc('bcc@example.com')
+        //->replyTo('fabien@example.com')
+        //->priority(Email::PRIORITY_HIGH)
+        ->subject('On va te spammer')
+        ->text('WE ARE LEGION')
+        ->html(fopen('../templates/emails/confirmation.html.twig', 'r'));
+
+    $mailer->send($email);
+
+        return $this->render('landing_page/confirmation.html.twig');
     }
 }
