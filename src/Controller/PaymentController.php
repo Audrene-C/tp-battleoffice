@@ -32,7 +32,7 @@ class PaymentController extends AbstractController
     /**
      * @Route("/{id}/payment", name="payment")
      */
-    public function index(Request $request, Order $order)
+    public function index(Order $order, Request $request)
     {
         $payment = new Payment;
 
@@ -42,18 +42,26 @@ class PaymentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             try {
-            // Set your secret key. Remember to switch to your live secret key in production!
-            // See your keys here: https://dashboard.stripe.com/account/apikeys
-            \Stripe\Stripe::setApiKey('sk_test_51HABwtFXlDry4DEkHdXIou7Z8smjzsVBOVTuw7xgi0M6e8QomPiWK6bBWMSvH6y3euvzmc3w9VRfzMAOv9o9T5wm00BjMXHkcM');
+                $price = 0;
+                if($order->getProduct() === '10 Nerf Elite Jolt + 2 offerts') {
+                    $price = 6490;
+                } elseif($order->getProduct() === '4 Nerf Elite Disruptor + 2 offerts') {
+                    $price = 5190;
+                } else {
+                    $price = 3990;
+                }
+                // Set your secret key. Remember to switch to your live secret key in production!
+                // See your keys here: https://dashboard.stripe.com/account/apikeys
+                \Stripe\Stripe::setApiKey('sk_test_51HABwtFXlDry4DEkHdXIou7Z8smjzsVBOVTuw7xgi0M6e8QomPiWK6bBWMSvH6y3euvzmc3w9VRfzMAOv9o9T5wm00BjMXHkcM');
 
-            // Token is created using Stripe Checkout or Elements!
-            // Get the payment token ID submitted by the form:
-            $token = $_POST['stripeToken'];
-            $charge = \Stripe\Charge::create([
-            'amount' => 999,
-            'currency' => 'usd',
-            'description' => 'Example charge',
-            'source' => 'tok_visa',
+                // Token is created using Stripe Checkout or Elements!
+                // Get the payment token ID submitted by the form:
+                $token = $_POST['stripeToken'];
+                $charge = \Stripe\Charge::create([
+                'amount' => $price,
+                'currency' => 'usd',
+                'description' => 'Example charge',
+                'source' => 'tok_visa',
             ]);
             } catch(\Stripe\Exception\CardException $e) {
 
