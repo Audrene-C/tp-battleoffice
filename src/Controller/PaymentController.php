@@ -71,7 +71,9 @@ class PaymentController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($order);
                 $entityManager->flush();
-                return $this->redirectToRoute('confirmation');
+                return $this->redirectToRoute('confirmation', [
+                    'id' => $order->getId()
+                ]);
             }
         }
 

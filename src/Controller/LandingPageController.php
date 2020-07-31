@@ -253,15 +253,15 @@ class LandingPageController extends AbstractController
         ]);
     }
     /**
-     * @Route("/confirmation", name="confirmation")
+     * @Route("/{id}/confirmation", name="confirmation")
      */
-    public function confirmation(MailerInterface $mailer)
+    public function confirmation(Order $order, MailerInterface $mailer)
     {
         // $this->sendEmail($mailer);
 
         $email = (new Email())
         ->from('audrene.coatmeur@gmail.com')
-        ->to('mateo.balthazard@hotmail.com')
+        ->to($order->getClient()->getEmail())
         //->cc('cc@example.com')
         //->bcc('bcc@example.com')
         //->replyTo('fabien@example.com')
